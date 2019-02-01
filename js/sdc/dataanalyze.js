@@ -14,9 +14,8 @@ class DataPlot extends React.Component {
         //根据keyword get JSON
         this.KeywordgetJSON=(keyword)=>{
             this.keyword=keyword;
-            console.log("关键字搜索暂时不能返回有用的结果");
-            //this.serverRequest=$.get('/search/'+keyword, this.SetNewState);
-            this.serverRequest=$.get('/date',  this.SetNewState);
+            this.serverRequest=$.get('/search/'+keyword,(result)=>{this.serverRequest=$.get(result.links[0].href,  this.SetNewState);});
+
         };
 
         //Get JSON并更新State
