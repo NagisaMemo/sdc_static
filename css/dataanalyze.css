@@ -1,0 +1,111 @@
+.chartcontainer{
+    margin:auto;
+    height:500px;
+    width:500px;
+}
+
+.mainimg{
+    width:200px;
+    height:200px;
+    margin: 200px auto auto 50%;
+    transform:translateX(-50%);
+}
+
+.maininput{
+    padding:0 10px 0 10px;
+    width:600px;
+    font-size:1.6em;
+    border:1px solid #666666;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+    margin:50px auto auto 50%;
+    transform:translateX(-50%);
+}
+
+a.button1{
+    text-align:center;
+    display:block;
+    border:2px solid #666666;
+    color: #666666;
+    font-family:"Source Han Sans CN";
+    font-size:1em;
+    background-color: white;
+
+    border-radius:10px;
+}
+a.button1:hover{
+    color:white;
+    border:2px solid white;
+    background-color: #1e99ff;
+    text-decoration: none;
+    cursor:pointer;
+}
+
+.mainsearchbutton{
+    padding:5px;
+    width:200px;
+    margin: 50px auto auto 50%;
+    transform:translateX(-50%);
+}
+
+.subimg{
+    width:80%;
+    height:80%;
+}
+
+
+
+.container{
+    width:800px;
+    margin: 50px auto auto auto;
+}
+
+.subinput{
+    padding:0 10px 0 10px;
+    width:100%;
+    font-size:1.5em;
+    border:1px solid #666666;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+}
+
+.col-xs-8{
+    padding:0;
+}
+
+.col-xs-2{
+    padding:0;
+}
+
+a.subsearchbutton{
+    width:100%;
+    text-align:center;
+    display:block;
+    color: #666666;
+    font-family:"Source Han Sans CN";
+    font-size:1.5em;
+    background-color: white;
+    border:1px solid #666666;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+}
+a.subsearchbutton{
+    text-decoration: none;
+    cursor:pointer;
+}
+
+#navbg{
+    position:absolute;
+    width:100%;
+    height:200px;
+    background-color:rgba(0,0,0,0.5);
+    background-image:url('/starsea.png');
+    background-repeat: no-repeat;
+    background-position:10% 50%;
+    z-index:-1;
+}
+
+#navcover{
+    width:100%;
+    height:200px;
+    background-color:rgba(0,0,0,0.5);
+    padding:10px;
+    margin-bottom:30px;
+}
