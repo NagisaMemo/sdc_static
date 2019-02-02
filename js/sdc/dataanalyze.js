@@ -2,19 +2,21 @@ class DataPlot extends React.Component {
     constructor(props) {
         super(props);
         this.state={type:'', links:'', keys: '', data: '', };
-        this.linkstack=[];
+        this.prev='';
         this.keyword='';
 
         //根据url get JSON
         this.URLgetJSON=(source)=>{
-            this.activelink=source;
+            if (this.serverRequest!=undefined){
+                this.serverRequest.abort();
+            }
             this.serverRequest=$.get(source,  this.SetNewState);
         };
 
         //根据keyword get JSON
         this.KeywordgetJSON=(keyword)=>{
             this.keyword=keyword;
-            this.serverRequest=$.get('/search/'+keyword,(result)=>{this.serverRequest=$.get(result.links[0].href,  this.SetNewState);});
+            this.serverRequest=$.get('/sdc/api/search/'+keyword,(result)=>{this.serverRequest=$.get(result.links[0].href,  this.SetNewState);});
 
         };
 
@@ -30,20 +32,25 @@ class DataPlot extends React.Component {
                 keyarray[i]=JSONresult.resultList[i].date;
                 dataarray[i]=JSONresult.resultList[i].result;
             }
+            //上级地址
+            if(JSONresult.type=="month" || JSONresult.type=="day"){
+                this.prev=JSONresult.links[JSONresult.links.length-1].href
+            }
+
             this.setState({type:JSONresult.type, links:linkarray, keys: keyarray, data: dataarray, });
         };
 
         //关键字搜索
         this.HandleSearch=()=>{
-            if(this.myChart!=undefined){
-                this.myChart.destroy();
-            }
             this.keyword=$("#searchbox").val();
             this.KeywordgetJSON(this.keyword);
         };
 
         //绘制图表
         this.PlotChart=()=>{
+            if(this.myChart!=undefined){
+                this.myChart.destroy();
+            }
             var ctx = $("#myChart");
             this.myChart = new Chart(ctx, {
                 type: 'line',
@@ -74,8 +81,6 @@ class DataPlot extends React.Component {
             var activePoints = this.myChart.getElementsAtEvent(evt);
             if (activePoints.length && this.state.type!="day") {
                 evt.stopPropagation();
-                this.myChart.destroy();
-                this.linkstack.push(this.activelink);
                 this.URLgetJSON(this.state.links[activePoints[0]._index]);
             }
 
@@ -84,10 +89,7 @@ class DataPlot extends React.Component {
 
         //返回上级
         this.ReturnUpper=()=>{
-            if (this.linkstack.length>0){
-                this.myChart.destroy();
-                this.URLgetJSON(this.linkstack.pop());
-            }
+            this.URLgetJSON(this.prev);
         };
 
         //this.URLgetJSON(props.source);
@@ -163,6 +165,6 @@ function MyNav(props){
 }
 
 ReactDOM.render(
-<DataPlot source="/date" />,
+<DataPlot />,
     document.getElementById('example')
 );
