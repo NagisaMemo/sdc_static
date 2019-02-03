@@ -16,7 +16,6 @@ class App extends Component {
 				<div>
           <Navbar/>
 				  <Route exact path="/" component={Index} />
-
 				</div>
 			</Router>
     );
