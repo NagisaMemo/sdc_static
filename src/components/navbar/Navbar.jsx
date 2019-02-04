@@ -5,9 +5,10 @@ class Navbar extends Component{
 
     constructor(props){
         super(props);
+        this.render = this.render.bind(this);
     }
 
-    render = ()=>{
+    render(){
         return (
             <div>
                 <div id="navbg"></div>
@@ -17,7 +18,7 @@ class Navbar extends Component{
                             <div className="col-xs-2">
                             </div>
                             <div className="col-xs-8">
-                                <input className="subinput" type="text" id="searchbox" defaultValue={this.props.keyword} onKeyUp={this.props.HandleKeywordInput}></input>
+                                <input autoFocus  className="subinput" type="text" id="searchbox" value={this.props.keyword} onChange={this.props.keywordHandler}></input>
                             </div>
                             <div className="col-xs-2">
                                 <a className="subsearchbutton" onClick={this.props.fun1}>搜 索</a>

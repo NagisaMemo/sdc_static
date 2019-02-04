@@ -12,9 +12,8 @@ import Index from './pages/index/Index';
 class App extends Component {
   render() {
     return (
-      <Router>
+      <Router basename="/sdc">
 				<div>
-          <Navbar/>
 				  <Route exact path="/" component={Index} />
 				</div>
 			</Router>
