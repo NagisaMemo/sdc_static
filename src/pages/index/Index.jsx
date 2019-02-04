@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios'; //http请求工具
 import Chart from 'chart.js';
+import Loader from '../../components/loader/Loader'//加载显示工具
 import Navbar from '../../components/navbar/Navbar';
 import './Index.css';
 import logo from '../../assets/starsea.png';
 class Index extends Component {
     constructor(props) {
         super(props);
-        this.state = { type: '', links: '', keys: '', data: '', keyword: '' };
+        this.state = { type: '', links: '', keys: '', data: '', keyword: '',loading:false };
         this.prev = '';
         this.context = null;
         this.chartRef = React.createRef();//建立react内部引用
@@ -26,16 +27,18 @@ class Index extends Component {
     //根据url get JSON
     URLgetJSON = (source) => {
         this.activelink = source;
+        this.setState({loading:true})
         this.serverRequest = axios.get(source)
             .then(res => res.data)//脱离主Response类
             .then((result) => {
                 this.SetNewState(result);
+                this.setState({loading:false})
             })
     };
 
     //根据keyword get JSON
     KeywordgetJSON = (keyword) => {
-        this.setState({ keyword });
+        this.setState({ keyword,loading:true });
         this.serverRequest = axios.get('/sdc/api/search/' + keyword)
             .then(res => res.data)
             .then((result) => {
@@ -43,6 +46,7 @@ class Index extends Component {
                     .then(res => res.data)
                     .then((result) => {
                         this.SetNewState(result);
+                        this.setState({loading:false});
                     })
             });
 
@@ -85,7 +89,6 @@ class Index extends Component {
             this.context = this.chartRef.current.getContext('2d');
         }
         var ctx = this.context;
-        console.log(this.context);
         if (this.myChart != undefined) {
             this.myChart.destroy();
         }
@@ -130,6 +133,9 @@ class Index extends Component {
 
     //render后绘制图表
     componentDidUpdate() {
+        if(this.state.keyword != ''){
+            this.PlotChart();
+        }
     }
 
     componentDidMount() { //不要用WillMount,马上要被砍了
@@ -140,6 +146,7 @@ class Index extends Component {
         if (this.state.keyword == '') {
             return (
                 <div>
+                    <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
                     <img src={logo} className="mainimg" />
                     <input  autoFocus className="maininput" value={this.state.keyword} onChange={this.HandleKeywordInput} type="text" id="searchbox"></input>
                     <a className="button1 mainsearchbutton" onClick={this.HandleSearch}>SDC一下 你就知道</a>
@@ -150,6 +157,7 @@ class Index extends Component {
             if (this.state.type == "month" || this.state.type == "day") {
                 return (
                     <div>
+                        <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
                         <Navbar fun1={this.HandleSearch} keyword={this.state.keyword} keywordHandler={this.HandleKeywordInput} />
                         <div className="chartcontainer">
                             <canvas ref={this.chartRef} id="myChart" width="400" height="400" onClick={this.HandleClick}></canvas>
@@ -161,6 +169,7 @@ class Index extends Component {
             else {
                 return (
                     <div>
+                        <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
                         <Navbar fun1={this.HandleSearch} keyword={this.state.keyword} keywordHandler={this.HandleKeywordInput} />
                         <div className="chartcontainer">
                             <canvas ref={this.chartRef} id="myChart" width="400" height="400" onClick={this.HandleClick}></canvas>
