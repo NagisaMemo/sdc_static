@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
 
 //import particals
-import Navbar from './components/navbar/Navbar';
 
 //import pages
 import Index from './pages/index/Index';

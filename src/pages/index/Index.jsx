@@ -3,42 +3,42 @@ import axios from 'axios'; //http请求工具
 import Chart from 'chart.js';
 import Loader from '../../components/loader/Loader'//加载显示工具
 import Navbar from '../../components/navbar/Navbar';
-import './Index.css';
-import logo from '../../assets/starsea.png';
+import './Index.css';//导入CSS
+import logo from '../../assets/starsea.png';//Logo
 class Index extends Component {
     constructor(props) {
         super(props);
-        this.state = { type: '', links: '', keys: '', data: '', keyword: '',loading:false };
+        this.state = { type: '', links: '', keys: '', data: '', keyword: '', loading: false };
         this.prev = '';
         this.context = null;
         this.chartRef = React.createRef();//建立react内部引用
 
-        //this.URLgetJSON(props.source);
-        this.URLgetJSON = this.URLgetJSON.bind(this);
-        this.KeywordgetJSON = this.KeywordgetJSON.bind(this);
-        this.SetNewState = this.SetNewState.bind(this);
-        this.HandleSearch = this.HandleSearch.bind(this);
-        this.PlotChart = this.PlotChart.bind(this);
+        //Bind所有函数至本类
+        this.URLgetJSON         = this.URLgetJSON.bind(this);
+        this.KeywordgetJSON     = this.KeywordgetJSON.bind(this);
+        this.SetNewState        = this.SetNewState.bind(this);
+        this.HandleSearch       = this.HandleSearch.bind(this);
+        this.PlotChart          = this.PlotChart.bind(this);
         this.HandleKeywordInput = this.HandleKeywordInput.bind(this);
-        this.HandleClick = this.HandleClick.bind(this);
-        this.ReturnUpper = this.ReturnUpper.bind(this);
+        this.HandleClick        = this.HandleClick.bind(this);
+        this.ReturnUpper        = this.ReturnUpper.bind(this);
     }
 
     //根据url get JSON
     URLgetJSON = (source) => {
         this.activelink = source;
-        this.setState({loading:true})
+        this.setState({ loading: true })
         this.serverRequest = axios.get(source)
             .then(res => res.data)//脱离主Response类
             .then((result) => {
                 this.SetNewState(result);
-                this.setState({loading:false})
+                this.setState({ loading: false })
             })
     };
 
     //根据keyword get JSON
     KeywordgetJSON = (keyword) => {
-        this.setState({ keyword,loading:true });
+        this.setState({ keyword, loading: true });
         this.serverRequest = axios.get('/sdc/api/search/' + keyword)
             .then(res => res.data)
             .then((result) => {
@@ -46,7 +46,7 @@ class Index extends Component {
                     .then(res => res.data)
                     .then((result) => {
                         this.SetNewState(result);
-                        this.setState({loading:false});
+                        this.setState({ loading: false });
                     })
             });
 
@@ -84,8 +84,8 @@ class Index extends Component {
 
     //绘制图表
     PlotChart = () => {
+        //提取DOM元素
         if (this.chartRef.current != null) {
-            console.log(this.chartRef);
             this.context = this.chartRef.current.getContext('2d');
         }
         var ctx = this.context;
@@ -133,12 +133,12 @@ class Index extends Component {
 
     //render后绘制图表
     componentDidUpdate() {
-        if(this.state.keyword != ''){
+        if (this.state.keyword != '') {
             this.PlotChart();
         }
     }
 
-    componentDidMount() { //不要用WillMount,马上要被砍了
+    componentDidMount() { //用DidMount替代WillMount
         //this.serverRequest.abort();
     }
 
@@ -148,7 +148,7 @@ class Index extends Component {
                 <div>
                     <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
                     <img src={logo} className="mainimg" />
-                    <input  autoFocus className="maininput" value={this.state.keyword} onChange={this.HandleKeywordInput} type="text" id="searchbox"></input>
+                    <input autoFocus className="maininput" value={this.state.keyword} onChange={this.HandleKeywordInput} type="text" id="searchbox"></input>
                     <a className="button1 mainsearchbutton" onClick={this.HandleSearch}>SDC一下 你就知道</a>
                 </div>
             );
