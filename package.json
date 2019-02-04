@@ -5,6 +5,7 @@
   "main": "min.js",
   "scripts": {
     "start": "node scripts/start.js",
+    "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },
@@ -23,7 +24,6 @@
     "chalk": "2.4.1",
     "chart.js": "^2.7.3",
     "css-loader": "1.0.0",
-    "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
     "eslint": "5.6.0",
     "eslint-config-react-app": "^3.0.6",
