@@ -15,12 +15,12 @@ class Navbar extends Component{
                 <div id="navcover">
                     <div className="container">
                         <div className="row" >
-                            <div className="col-xs-2">
+                            <div className="col-2">
                             </div>
-                            <div className="col-xs-8">
+                            <div className="col-8">
                                 <input autoFocus  className="subinput" type="text" id="searchbox" value={this.props.keyword} onChange={this.props.keywordHandler}></input>
                             </div>
-                            <div className="col-xs-2">
+                            <div className="col-2">
                                 <a className="subsearchbutton" onClick={this.props.fun1}>搜 索</a>
                             </div>
                         </div>

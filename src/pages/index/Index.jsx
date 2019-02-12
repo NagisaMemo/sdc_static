@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import axios from 'axios'; //http请求工具
 import Chart from 'chart.js';
 import Loader from '../../components/loader/Loader'//加载显示工具
 import Navbar from '../../components/navbar/Navbar';
+import Modal from '../../components/modal/Modal';
+import 'bootstrap/js/dist/modal';
 import './Index.css';//导入CSS
 import logo from '../../assets/starsea.png';//Logo
 class Index extends Component {
@@ -42,12 +45,19 @@ class Index extends Component {
         this.serverRequest = axios.get('/sdc/api/search/' + keyword)
             .then(res => res.data)
             .then((result) => {
+                if(result.links.length==0)
+                {
+                    $("#Modalbox").modal();
+                }
+                else
+                {
                 this.serverRequest = axios.get(result.links[0].href)
                     .then(res => res.data)
                     .then((result) => {
                         this.SetNewState(result);
                         this.setState({ loading: false });
                     })
+                }
             });
 
     };
@@ -150,6 +160,7 @@ class Index extends Component {
                     <img src={logo} className="mainimg" />
                     <input autoFocus className="maininput" value={this.state.keyword} onChange={this.HandleKeywordInput} type="text" id="searchbox"></input>
                     <a className="button1 mainsearchbutton" onClick={this.HandleSearch}>SDC一下 你就知道</a>
+                    <Modal />
                 </div>
             );
         }
@@ -163,6 +174,7 @@ class Index extends Component {
                             <canvas ref={this.chartRef} id="myChart" width="400" height="400" onClick={this.HandleClick}></canvas>
                         </div>
                         <a className="button1 mainsearchbutton" onClick={this.ReturnUpper}>返回上级</a>
+                        <Modal />
                     </div>
                 );
             }
@@ -174,6 +186,7 @@ class Index extends Component {
                         <div className="chartcontainer">
                             <canvas ref={this.chartRef} id="myChart" width="400" height="400" onClick={this.HandleClick}></canvas>
                         </div>
+                        <Modal />
                     </div>
                 );
             }
