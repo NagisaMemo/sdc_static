@@ -469,6 +469,10 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery: "jquery"
+      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(

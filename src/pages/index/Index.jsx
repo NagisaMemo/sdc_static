@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import axios from 'axios'; //http请求工具
-import Chart from 'chart.js';
 import Loader from '../../components/loader/Loader'//加载显示工具
 import Navbar from '../../components/navbar/Navbar';
+import Modal from '../../components/modal/Modal';
+import 'bootstrap/js/dist/modal';
+import Linegraph from '../../components/Linegraph/Linegraph';
 import './Index.css';//导入CSS
 import logo from '../../assets/starsea.png';//Logo
 class Index extends Component {
@@ -18,16 +21,14 @@ class Index extends Component {
         this.KeywordgetJSON     = this.KeywordgetJSON.bind(this);
         this.SetNewState        = this.SetNewState.bind(this);
         this.HandleSearch       = this.HandleSearch.bind(this);
-        this.PlotChart          = this.PlotChart.bind(this);
         this.HandleKeywordInput = this.HandleKeywordInput.bind(this);
-        this.HandleClick        = this.HandleClick.bind(this);
+        this.getChild           = this.getChild.bind(this);
         this.ReturnUpper        = this.ReturnUpper.bind(this);
     }
 
     //根据url get JSON
     URLgetJSON = (source) => {
-        this.activelink = source;
-        this.setState({ loading: true })
+        this.setState({ loading: true });
         this.serverRequest = axios.get(source)
             .then(res => res.data)//脱离主Response类
             .then((result) => {
@@ -42,12 +43,19 @@ class Index extends Component {
         this.serverRequest = axios.get('/sdc/api/search/' + keyword)
             .then(res => res.data)
             .then((result) => {
+                if(result.links.length==0)
+                {
+                    $("#Modalbox").modal();
+                }
+                else
+                {
                 this.serverRequest = axios.get(result.links[0].href)
                     .then(res => res.data)
                     .then((result) => {
                         this.SetNewState(result);
                         this.setState({ loading: false });
                     })
+                }
             });
 
     };
@@ -73,56 +81,19 @@ class Index extends Component {
 
     //关键字搜索
     HandleSearch = () => {
-        this.PlotChart();
         this.KeywordgetJSON(this.state.keyword);
     };
 
     //更新关键字
     HandleKeywordInput = (e) => {
         this.setState({ keyword: e.target.value });
-    }
-
-    //绘制图表
-    PlotChart = () => {
-        //提取DOM元素
-        if (this.chartRef.current != null) {
-            this.context = this.chartRef.current.getContext('2d');
-        }
-        var ctx = this.context;
-        if (this.myChart != undefined) {
-            this.myChart.destroy();
-        }
-        this.myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: this.state.keys,
-                datasets: [{
-                    label: 'data',
-                    data: this.state.data,
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
     };
+
 
     //访问下级
-    HandleClick = (evt) => {
-        var activePoints = this.myChart.getElementsAtEvent(evt);
-        if (activePoints.length && this.state.type != "day") {
-            evt.stopPropagation();
-            this.URLgetJSON(this.state.links[activePoints[0]._index]);
-        }
-
-    };
+    getChild = (pointindex) => {
+            this.URLgetJSON(this.state.links[pointindex]);
+        };
 
 
     //返回上级
@@ -130,26 +101,24 @@ class Index extends Component {
         this.URLgetJSON(this.prev);
     };
 
-
-    //render后绘制图表
     componentDidUpdate() {
-        if (this.state.keyword != '') {
-            this.PlotChart();
-        }
     }
 
     componentDidMount() { //用DidMount替代WillMount
         //this.serverRequest.abort();
     }
 
+
     render() {
-        if (this.state.keyword == '') {
+        if (this.state.keys.length == 0) {
             return (
                 <div>
                     <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
                     <img src={logo} className="mainimg" />
                     <input autoFocus className="maininput" value={this.state.keyword} onChange={this.HandleKeywordInput} type="text" id="searchbox"></input>
                     <a className="button1 mainsearchbutton" onClick={this.HandleSearch}>SDC一下 你就知道</a>
+
+                    <Modal />
                 </div>
             );
         }
@@ -159,10 +128,9 @@ class Index extends Component {
                     <div>
                         <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
                         <Navbar fun1={this.HandleSearch} keyword={this.state.keyword} keywordHandler={this.HandleKeywordInput} />
-                        <div className="chartcontainer">
-                            <canvas ref={this.chartRef} id="myChart" width="400" height="400" onClick={this.HandleClick}></canvas>
-                        </div>
+                        <Linegraph type={this.state.type} keys={this.state.keys} data={this.state.data} toParent={this.getChild}/>
                         <a className="button1 mainsearchbutton" onClick={this.ReturnUpper}>返回上级</a>
+                        <Modal />
                     </div>
                 );
             }
@@ -171,9 +139,8 @@ class Index extends Component {
                     <div>
                         <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
                         <Navbar fun1={this.HandleSearch} keyword={this.state.keyword} keywordHandler={this.HandleKeywordInput} />
-                        <div className="chartcontainer">
-                            <canvas ref={this.chartRef} id="myChart" width="400" height="400" onClick={this.HandleClick}></canvas>
-                        </div>
+                        <Linegraph type={this.state.type} keys={this.state.keys} data={this.state.data} toParent={this.getChild}/>
+                        <Modal />
                     </div>
                 );
             }
