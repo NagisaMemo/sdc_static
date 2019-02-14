@@ -4,7 +4,6 @@ import axios from 'axios'; //http请求工具
 import Loader from '../../components/loader/Loader'//加载显示工具
 import Navbar from '../../components/navbar/Navbar';
 import Modal from '../../components/modal/Modal';
-import 'bootstrap/js/dist/modal';
 import Linegraph from '../../components/Linegraph/Linegraph';
 import './Index.css';//导入CSS
 import logo from '../../assets/starsea.png';//Logo
