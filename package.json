@@ -75,7 +75,7 @@
   "bugs": {
     "url": "https://github.com/StarSeaProject/sdc_static/issues"
   },
-  "homepage": "https://github.com/StarSeaProject/sdc_static#readme",
+  "homepage": "https://starrysea.top/sdc/",
   "eslintConfig": {
     "extends": "react-app"
   },
