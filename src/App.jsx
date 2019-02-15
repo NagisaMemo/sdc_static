@@ -12,7 +12,7 @@ import Index from './pages/index/Index';
 class App extends Component {
   render() {
     return (
-      <Router basename={(env.NODE_ENV) == 'development' ? '/sdc/' : '/'}>
+      <Router >
 				<div>
 				  <Route exact path="/" component={Index} />
 				</div>

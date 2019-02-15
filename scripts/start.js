@@ -103,7 +103,6 @@ checkBrowsers(paths.appPath, isInteractive)
       }
       console.log(chalk.cyan('Starting the development server...\n'));
       
-      console.log("With Env.:" + env.NODE_ENV+ ", file will serve at:" + ((env.NODE_ENV) == 'development' ? '/' : '/sdc/'));
       openBrowser(urls.localUrlForBrowser);
     });
 

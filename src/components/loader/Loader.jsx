@@ -6,7 +6,7 @@ export default function Loader({ active,children }) {
   return (
     <LoadingOverlay
       active={active}
-      spinner={<BarLoader width="100" widthUnit="vw" color="skyblue" height="10" heightUnit="px"/>}
+      spinner={<BarLoader width={100} widthUnit="vw" color="skyblue" height={10} heightUnit="px"/>}
       text={children}
     >
     </LoadingOverlay>
