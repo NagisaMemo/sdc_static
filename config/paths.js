@@ -69,7 +69,7 @@ const resolveModule = (resolveFn, filePath) => {
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
-  appEnvPath: ((env.NODE_ENV) == 'development' ? '/' : '/sdc/'),
+  appEnvPath: ((env.NODE_ENV) == 'development' ? '/sdc/' : '/'),
   appPath: resolveApp('./'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),
