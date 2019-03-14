@@ -6,7 +6,10 @@ import Navbar from '../../components/navbar/Navbar';
 import Modal from '../../components/modal/Modal';
 import Linegraph from '../../components/Linegraph/Linegraph';
 import './Index.css';//导入CSS
-import logo from '../../assets/starsea.png';//Logo
+import logo from '../../assets/starsea.png';
+import HorizontalBarGraph from "../../components/HorizontalBarGraph/HorizontalBarGraph";
+
+//Logo
 class Index extends Component {
     constructor(props) {
         super(props);
@@ -65,10 +68,10 @@ class Index extends Component {
         var linkarray = new Array(JSONresult.resultList.length);
         var keyarray = new Array(JSONresult.resultList.length);
         for (var i = 0; i < JSONresult.resultList.length; i++) {
-            if (JSONresult.type != "day") {
+            if (JSONresult.type == "year" || JSONresult.type == "month") {
                 linkarray[i] = JSONresult.links[i].href;
             }
-            keyarray[i] = JSONresult.resultList[i].date;
+            keyarray[i] = JSONresult.resultList[i].index;
             dataarray[i] = JSONresult.resultList[i].result;
         }
         //上级地址
@@ -121,6 +124,18 @@ class Index extends Component {
                 </div>
             );
         }
+        else if(this.state.type == "userId")
+            {
+                return (
+                    <div>
+                        <Loader active={this.state.loading} children={"正在加载中..."}></Loader>
+                        <Navbar fun1={this.HandleSearch} keyword={this.state.keyword} keywordHandler={this.HandleKeywordInput} />
+                        <HorizontalBarGraph type={this.state.type} keys={this.state.keys} data={this.state.data}/>
+                        <Modal />
+                    </div>
+                );
+            }
+
         else {
             if (this.state.type == "month" || this.state.type == "day") {
                 return (
